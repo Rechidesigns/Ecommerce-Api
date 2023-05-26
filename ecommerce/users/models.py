@@ -15,9 +15,23 @@ class User(AbstractUser):
 
     # First and last name do not cover name patterns around the globe
     # name = None # type: ignore
-    first_name = CharField(_("Name of User"), blank=True, max_length=200)
-    last_name = CharField(_("Name of User"), blank=True, max_length=200)
-    email = EmailField(_("email address"), unique=True)
+    first_name = CharField(
+        _("Name of User"), 
+        blank=True, 
+        max_length=200
+        )
+    
+    last_name = CharField(
+        _("Name of User"), 
+        blank=True, 
+        max_length=200
+        )
+    
+    email = EmailField(
+        _("email address"), 
+        unique=True
+        )
+    
     username = None  # type: ignore
 
     USERNAME_FIELD = "email"
@@ -33,3 +47,13 @@ class User(AbstractUser):
 
         """
         return reverse("users:detail", kwargs={"pk": self.id})
+    
+    class Meta:
+        verbose_name = _("users  Account")
+        verbose_name_plural = _("users  Account")
+
+    # def __str__(self):
+    #     return str(self.email)
+    
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} ({self.email})"
