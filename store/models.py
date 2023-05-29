@@ -9,7 +9,7 @@ from helpers.common.basemodel import BaseModel
 from ecommerce.users.models import User
 
 
-        
+
 class Category( BaseModel ):
     
     title = models.CharField(
@@ -114,15 +114,15 @@ class Product( BaseModel ):
         )
     
 
-    @property
-    def price(self):
-        if self.discount:
-            new_price = self.old_price - ((30/100)*self.old_price)
-        else:
-            new_price = self.old_price
-        return new_price
-    
     # @property
+    # def price(self):
+    #     if self.discount:
+    #         new_price = self.old_price - ((30/100)*self.old_price)
+    #     else:
+    #         new_price = self.old_price
+    #     return new_price
+    
+    # # @property
     # def img(self):
     #     if self.image == "":
     #         self.image = ""
@@ -163,22 +163,22 @@ class Cart( BaseModel ):
         )
     
 
-    @property
-    def num_of_items(self):
-        cartitems = self.cartitems_set.all()
-        qtysum = sum([ qty.quantity for qty in cartitems])
-        return qtysum
+    # @property
+    # def num_of_items(self):
+    #     cartitems = self.cartitems_set.all()
+    #     qtysum = sum([ qty.quantity for qty in cartitems])
+    #     return qtysum
     
-    @property
-    def cart_total(self):
-        cartitems = self.cartitems_set.all()
-        qtysum = sum([ qty.subTotal for qty in cartitems])
-        return qtysum
+    # @property
+    # def cart_total(self):
+    #     cartitems = self.cartitems_set.all()
+    #     qtysum = sum([ qty.subTotal for qty in cartitems])
+    #     return qtysum
 
     def __str__(self):
         return str(self.cart_id)
 
-class Cartitems( BaseModel ):
+class Cartitem ( models.Model ):
     
     cart = models.ForeignKey(
         Cart, on_delete=models.CASCADE, 
@@ -202,11 +202,14 @@ class Cartitems( BaseModel ):
         )
     
     
-    @property
-    def subTotal(self):
-        total = self.quantity * self.product.price
+    # @property
+    # def subTotal(self):
+    #     total = self.quantity * self.product.price
         
-        return total
+    #     return total
+    
+    def __str__(self):
+        return str(self.quantity)
     
    
 
@@ -287,5 +290,9 @@ class Address( BaseModel ):
     #     return self.home_address
     
     
+    # def __str__(self):
+    #     return f"{self.home_address_1} {self.home_address_2}"
+    
+    
     def __str__(self):
-        return f"{self.home_address_1} {self.home_address_2}"
+        return f"{self.first_name} {self.last_name} ({self.customer})"

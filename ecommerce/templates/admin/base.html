@@ -1,0 +1,427 @@
+{% load i18n static jazzmin admin_urls %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_current_language_bidi as LANGUAGE_BIDI %}
+{% get_jazzmin_settings request as jazzmin_settings %}
+{% get_jazzmin_ui_tweaks as jazzmin_ui %}
+
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>{% block title %}{{ title }} | {{ jazzmin_settings.site_title }}{% endblock %}</title>
+
+    <!-- Font Awesome Icons -->
+    <!-- <link rel="stylesheet" href="{% static "vendor/fontawesome-free/css/all.min.css" %}"> -->
+
+    <!-- Bootstrap and adminLTE -->
+    <link rel="stylesheet" href="{% static "vendor/adminlte/css/adminlte.min.css" %}" id="adminlte-css">
+    
+
+    <!--  Bootswatch theme  -->
+    {% if jazzmin_ui.theme.name != 'default' %}
+        <link rel="stylesheet" href="{{ jazzmin_ui.theme.src }}" id="jazzmin-theme" />
+    {% endif %}
+
+    {% if jazzmin_ui.dark_mode_theme %}
+        <link rel="stylesheet" href="{{ jazzmin_ui.dark_mode_theme.src }}" id="jazzmin-dark-mode-theme" media="(prefers-color-scheme: dark)"/>
+    {% endif %}
+
+    <!-- Custom fixes for django -->
+    <link rel="stylesheet" href="{% static "jazzmin/css/main.css" %}">
+
+    {% if jazzmin_settings.custom_css %}
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static jazzmin_settings.custom_css %}">
+    {% endif %}
+
+    <!-- favicons -->
+    <link rel="shortcut icon" href="{% static jazzmin_settings.site_icon %}" type="image/png">
+    <link rel="icon" href="{% static jazzmin_settings.site_icon %}" sizes="32x32" type="image/png">
+
+    <link rel="stylesheet" href="{% static 'macbotadmin/assets/css/dashlite.css' %}">
+    <link id="skin-default" rel="stylesheet" href="{% static 'macbotadmin/assets/css/theme.css' %}">
+
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+    {% block extrastyle %} {% endblock %}
+    {% block extrahead %} {% endblock %}
+</head>
+<body class="nk-body npc-default has-apps-sidebar has-sidebar ">
+    <div class="nk-app-root">
+        <div class="nk-apps-sidebar is-dark">
+            <div class="nk-apps-brand">
+                <a href="#" class="logo-link">
+                    <img class="logo-light logo-img" src="{% static 'macbotadmin/images/logo-small.png' %}"  alt="logo">
+                    <img class="logo-dark logo-img" src="{% static 'macbotadmin/images/logo-dark-small.png' %}"  alt="logo-dark">
+                </a>
+            </div>
+            <div class="nk-sidebar-element">
+                <div class="nk-sidebar-body">
+                    <div class="nk-sidebar-content" data-simplebar>
+                        <div class="nk-sidebar-menu">
+                            <!-- Menu -->
+                            <ul class="nk-menu apps-menu">
+                                <li class="nk-menu-item">
+                                    <a href="#" class="nk-menu-link" title="Analytics Dashboard">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-dashboard"></em></span>
+                                    </a>
+                                </li>
+                                <li class="nk-menu-item">
+                                    <a href="html/index-sales.html" class="nk-menu-link" title="Sales Dashboard">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-speed"></em></span>
+                                    </a>
+                                </li>
+                               
+                               
+                            </ul>
+                        </div>
+                        <div class="nk-sidebar-footer">
+                            <ul class="nk-menu nk-menu-md">
+                                <li class="nk-menu-item">
+                                    <a href="#" class="nk-menu-link" title="Settings">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-setting"></em></span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="nk-sidebar-profile nk-sidebar-profile-fixed dropdown">
+                        <a href="#" data-toggle="dropdown" data-offset="50,-60">
+                            <div class="user-avatar">
+                                <span>AB</span>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-md ml-4">
+                            <div class="dropdown-inner user-card-wrap d-none d-md-block">
+                                <div class="user-card">
+                                    <div class="user-avatar">
+                                        <span>AB</span>
+                                    </div>
+                                    <div class="user-info">
+                                        <span class="lead-text">{{ request.user.name | title  }}</span>
+                                        <span class="sub-text text-soft">{{ request.user.email }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dropdown-inner">
+                                <ul class="link-list">
+                                    <li><a href="#"><em class="icon ni ni-user-alt"></em><span>View Profile</span></a></li>
+                                    <li><a href="#"><em class="icon ni ni-setting-alt"></em><span>Account Setting</span></a></li>
+                                    <li><a href="#"><em class="icon ni ni-activity-alt"></em><span>Login Activity</span></a></li>
+                                </ul>
+                            </div>
+                            <div class="dropdown-inner">
+                                <ul class="link-list">
+                                    <li><a href="{% url 'admin:logout' %}"><em class="icon ni ni-signout"></em><span>Sign out</span></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+          <div class="nk-main ">
+            <!-- wrap @s -->
+            <div class="nk-wrap ">
+                <!-- main header @s -->
+                <div class="nk-header nk-header-fixed is-light">
+                    <div class="container-fluid">
+                        <div class="nk-header-wrap">
+                            <div class="nk-menu-trigger d-xl-none ml-n1">
+                                <a href="#" class="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em class="icon ni ni-menu"></em></a>
+                            </div>
+                            <div class="nk-header-app-name">
+                                <div class="nk-header-app-logo">
+                                    <em class="icon ni ni-dashlite bg-purple-dim"></em>
+                                </div>
+                                <div class="nk-header-app-info">
+                                    <span class="sub-text">DashLite</span>
+                                    <span class="lead-text">Dashboard</span>
+                                </div>
+                            </div>
+                            <div class="nk-header-menu is-light">
+                                <div class="nk-header-menu-inner">
+                                    <!-- Menu -->
+                                    <ul class="nk-menu nk-menu-main">
+                                        <li class="nk-menu-item">
+                                            <a href="#" class="nk-menu-link">
+                                                <span class="nk-menu-text">Overview</span>
+                                            </a>
+                                        </li>
+                                        <li class="nk-menu-item">
+                                            <a href="#" class="nk-menu-link">
+                                                <span class="nk-menu-text">Components</span>
+                                            </a>
+                                        </li>
+                                       
+                                    </ul>
+                                    <!-- Menu -->
+                                </div>
+                            </div>
+                            <div class="nk-header-tools">
+                                <ul class="nk-quick-nav">
+                                 
+                                    <li class="dropdown notification-dropdown">
+                                        <a href="#" class="dropdown-toggle nk-quick-nav-icon" data-toggle="dropdown">
+                                            <div class="icon-status icon-status-info"><em class="icon ni ni-bell"></em></div>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-xl dropdown-menu-right">
+                                            <div class="dropdown-head">
+                                                <span class="sub-title nk-dropdown-title">Notifications</span>
+                                                <a href="#">Mark All as Read</a>
+                                            </div>
+                                            <div class="dropdown-body">
+                                                <div class="nk-notification">
+                                                    <div class="nk-notification-item dropdown-inner">
+                                                        <div class="nk-notification-icon">
+                                                            <em class="icon icon-circle bg-primary-dim ni ni-share"></em>
+                                                        </div>
+                                                        <div class="nk-notification-content">
+                                                            <div class="nk-notification-text">Iliash shared <span>Dashlite-v2</span> with you.</div>
+                                                            <div class="nk-notification-time">Just now</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="nk-notification-item dropdown-inner">
+                                                        <div class="nk-notification-icon">
+                                                            <em class="icon icon-circle bg-info-dim ni ni-edit"></em>
+                                                        </div>
+                                                        <div class="nk-notification-content">
+                                                            <div class="nk-notification-text">Iliash <span>invited</span> you to edit <span>DashLite</span> folder</div>
+                                                            <div class="nk-notification-time">2 hrs ago</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="nk-notification-item dropdown-inner">
+                                                        <div class="nk-notification-icon">
+                                                            <em class="icon icon-circle bg-primary-dim ni ni-share"></em>
+                                                        </div>
+                                                        <div class="nk-notification-content">
+                                                            <div class="nk-notification-text">You have shared <span>project v2</span> with Parvez.</div>
+                                                            <div class="nk-notification-time">7 days ago</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="nk-notification-item dropdown-inner">
+                                                        <div class="nk-notification-icon">
+                                                            <em class="icon icon-circle bg-success-dim ni ni-spark"></em>
+                                                        </div>
+                                                        <div class="nk-notification-content">
+                                                            <div class="nk-notification-text">Your <span>Subscription</span> renew successfully.</div>
+                                                            <div class="nk-notification-time">2 month ago</div>
+                                                        </div>
+                                                    </div>
+                                                </div><!-- .nk-notification -->
+                                            </div><!-- .nk-dropdown-body -->
+                                            <div class="dropdown-foot center">
+                                                <a href="#">View All</a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                   
+                                    <li class="dropdown user-dropdown">
+                                        <a href="#" class="dropdown-toggle mr-n1" data-toggle="dropdown">
+                                            <div class="user-toggle">
+                                                <div class="user-avatar sm">
+                                                    <em class="icon ni ni-user-alt"></em>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
+                                            <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
+                                                <div class="user-card">
+                                                    <div class="user-avatar">
+                                                        <span>AB</span>
+                                                    </div>
+                                                    <div class="user-info">
+                                                        <span class="lead-text">Admin__{{request.user | title}}</span>
+                                                        <span class="sub-text">{{request.user.email }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown-inner">
+                                                <ul class="link-list">
+                                                    <li><a href="#"><em class="icon ni ni-user-alt"></em><span>View Profile</span></a></li>
+                                                    <li><a href="{% url 'admin:password_change' %}"><em class="icon ni ni-lock-alt"></em><span>Change Password</span></a></li>
+                                                    <li><a href="#"><em class="icon ni ni-activity-alt"></em><span>Login Activity</span></a></li>
+                                                    <li><a class="dark-switch" href="#"><em class="icon ni ni-moon"></em><span>Dark Mode</span></a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="dropdown-inner">
+                                                <ul class="link-list">
+                                                    <li><a href="{% url 'admin:logout' %}"><em class="icon ni ni-signout"></em><span>Sign out</span></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <!-- main header @e -->
+                 <div class="nk-sidebar" data-content="sidebarMenu">
+                    <div class="nk-sidebar-inner" data-simplebar>
+                        <ul class="nk-menu nk-menu-md">
+                            <li class="nk-menu-heading">
+                                
+                                <h6 class="overline-title text-primary-alt">Dashboards</h6>
+                            </li><!-- .nk-menu-heading -->
+                            <li class="nk-menu-item">
+                                <a href="{%url 'admin:index' %}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-home"></em></span>
+                                    <span class="nk-menu-text">My Dashboard</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-item">
+                                <a href="#" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-money"></em></span>
+                                    <span class="nk-menu-text">Transactions</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-item">
+                                <a href="{%url 'admin:index' %}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-home"></em></span>
+                                    <span class="nk-menu-text">My Dashboard</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+                           
+                            </li><!-- .nk-menu-item -->
+                                                    
+                       
+
+                            {% include 'admin/app_list.html' with app_list=available_apps show_changelinks=False %}
+                          
+                          
+                           
+                        </ul><!-- .nk-menu -->
+                    </div>
+                </div>
+                <!-- content @s -->
+
+                <div class="nk-content ">
+                    <div class="container-fluid">
+                        <div class="nk-content-inner">
+                    
+
+                        <div class="" {% if is_popup %}style="margin-left:0px; padding-top: 20px;"{% endif %}>
+                            {% block page_content %}
+                                {% if not is_popup %}
+                                <div class="content-header">
+                                    <div class="container-fluid">
+                                        <div class="row mb-2">
+                                            <div class="col-auto col-sm-3">
+                                                <h1 class="m-0">{% block content_title %}{% endblock %}</h1>
+                                            </div>
+                                            <div class="col-auto col-sm-9">
+                                                {% block breadcrumbs %}{% endblock %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                <div class="content">
+                                    <div class="container-fluid">
+                                        <section id="content" class="content">
+                                            {% block messages %}
+                                                {% for message in messages %}
+                                                    {% if message.tags == 'success' %}
+                                                        <div class="alert alert-success alert-dismissible">
+                                                            <button type="button" class="close" style="color: white;" data-dismiss="alert" aria-hidden="true">×
+                                                            </button>
+                                                            <em class="icon ni ni-check-circle-fill"></em><span style="color:white;">{{ message|capfirst }}</span>
+                                                        </div>
+                                                       
+                                                    {% elif message.tags == 'error' %}
+                                                        <div class="alert alert-danger alert-dismissible">
+                                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                                            </button>
+                                                            <i class="icon fa fa-ban"></i><span style="color:white;">{{ message|capfirst }}</span>
+                                                        </div>
+                                                    {% elif message.tags == 'warning' %}
+                                                        <div class="alert alert-warning alert-dismissible">
+                                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                                            </button>
+                                                            <i class="icon fa fa-exclamation-triangle"></i><span style="color:white;">{{ message|capfirst }}</span>
+                                                        </div>
+                                                    {% elif message.tags == 'info' %}
+                                                        <div class="alert alert-info alert-dismissible">
+                                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                                            </button>
+                                                            <i class="icon fa fa-info"></i><span style="color:white;">{{ message|capfirst }}</span>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endblock messages %}
+                                            <div class="row">
+                                                {% block content %} {% endblock %}
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>
+
+
+                            {% endblock %}
+                        </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+    </div>
+
+{% if jazzmin_settings.show_ui_builder %}
+<div id="codeBox" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{% trans 'UI Configuration' %}</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>{% trans 'Copy this info your settings file to persist these UI changes' %}</p>
+                <pre><code></code></pre>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn {{ jazzmin_ui.button_classes.danger }}" data-dismiss="modal">{% trans 'Close' %}</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endif %}
+
+<!-- jQuery -->
+<script src="{% static "admin/js/vendor/jquery/jquery.js" %}"></script>
+<!-- Bootstrap 4 -->
+<script src="{% static "vendor/bootstrap/js/bootstrap.min.js" %}"></script>
+<!-- AdminLTE App -->
+<script src="{% static "vendor/adminlte/js/adminlte.min.js" %}"></script>
+<!-- Django customisations -->
+<script src="{% static "jazzmin/js/main.js" %}"></script>
+
+{% if jazzmin_settings.custom_js %}
+<script src="{% static jazzmin_settings.custom_js %}"></script>
+{% endif %}
+
+{% if jazzmin_settings.show_ui_builder %}
+<script>
+    window.ui_changes = {{ jazzmin_ui.raw|as_json|safe }};
+</script>
+<script src="{% static "jazzmin/js/ui-builder.js" %}"></script>
+{% endif %}
+
+{% block extrajs %}{% endblock %}
+<script src="{% static 'macbotadmin/assets/js/bundle.js' %}"></script>
+<script src="{% static 'macbotadmin/assets/js/scripts.js' %}"></script>
+<script src="{% static 'macbotadmin/assets/js/charts/gd-analytics.js' %}"></script>
+<script src="{% static 'macbotadmin/assets/js/libs/jqvmap.js' %}"></script>
+<script src="{% static 'macbotadmin/assets/js/charts/gd-default.js' %}"></script>
+
+</body>
+</html>

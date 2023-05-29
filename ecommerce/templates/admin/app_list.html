@@ -1,0 +1,39 @@
+{% load i18n %}
+{% if app_list  %}
+{% for app in app_list %}
+
+    <!-- .nk-menu-heading -->
+
+        <li class="nk-menu-heading">
+            <h6 class="overline-title text-primary-alt">{{ app.name }}</h6>
+        </li><!-- .nk-menu-heading -->
+
+    {% for model in app.models %}
+        <!-- <tr class="model-{{ model.object_name|lower }}{% if model.admin_url in request.path %} current-model{% endif %}"> -->
+        {% if model.admin_url %}
+        
+    
+        <li class="nk-menu-item">
+            <a href="{{ model.admin_url }}" class="nk-menu-link">
+                <span class="nk-menu-icon"><em class="icon ni ni-note-add-fill"></em></span>
+                <span class="nk-menu-text">{{ model.name }}</span>
+            </a>
+        </li><!-- .nk-menu-item -->
+        {% else %}
+        <li class="nk-menu-item">
+            <a href="" class="nk-menu-link">
+                <span class="nk-menu-icon"><em class="icon ni ni-note-add-fill"></em></span>
+                <span class="nk-menu-text">{{ model.name }}</span>
+            </a>
+        </li><!-- .nk-menu-item -->
+
+        {% endif %}
+
+    
+    
+    {% endfor %}
+
+{% endfor %}
+{% else %}
+<p>{% translate 'You don’t have permission to view or edit anything.' %}</p>
+{% endif %}
