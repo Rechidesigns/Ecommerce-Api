@@ -54,7 +54,7 @@ LOCALE_PATHS = [str(BASE_DIR / "locale")]
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ecommerce',
+        'NAME': 'ecomm',
         'USER': 'postgres',
         'PASSWORD': 'Alexwhite96',
         'HOST': 'localhost',
@@ -106,7 +106,6 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "ecommerce.users",
     # Your stuff: custom apps go here
-    "helpers.apps.HelpersConfig",
     "store.apps.StoreConfig",
 
 ]

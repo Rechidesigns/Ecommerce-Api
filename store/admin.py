@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Category, Cart, Cartitem, SavedItem, Address
+from store.models import Product, Category, Cart, Cart_Item, Saved_Item, Address
 
 
 @admin.register( Category )
@@ -17,13 +17,13 @@ class CartAdmin (admin.ModelAdmin):
     list_display = ( 'owner', 'created', 'completed', 'session_id' )
     list_display_links = ( 'owner', 'created' )
     
-@admin.register( Cartitem )
-class CartitemAdmin (admin.ModelAdmin):
+@admin.register( Cart_Item )
+class Cart_ItemAdmin (admin.ModelAdmin):
     list_display = ('cart', 'product', 'quantity')
     list_display_links = ('cart', 'product')
     
-@admin.register( SavedItem )
-class SavedItemAdmin (admin.ModelAdmin):
+@admin.register( Saved_Item )
+class Saved_ItemAdmin (admin.ModelAdmin):
     list_display = ('owner', 'product', 'added')
     list_display_links = ('owner', 'product')
     

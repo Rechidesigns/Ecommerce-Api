@@ -44,6 +44,11 @@ class Category( BaseModel ):
     def __str__(self):
         return self.title
     
+    class Meta:
+        ordering = ['-created_date']
+        verbose_name = _("Category")
+        verbose_name_plural = _("Categories")
+    
 
 class Product( BaseModel ):
     
@@ -131,6 +136,14 @@ class Product( BaseModel ):
 
     def __str__(self):
         return self.name
+    
+    
+    class Meta:
+        ordering = ['-created_date']
+        verbose_name = _("Products ")
+        verbose_name_plural = _("Products")
+    
+    
 
 class Cart( BaseModel ):
     
@@ -177,8 +190,15 @@ class Cart( BaseModel ):
 
     def __str__(self):
         return str(self.cart_id)
+    
+    class Meta:
+        ordering = ['-created_date']
+        verbose_name = _("Cart")
+        verbose_name_plural = _("Carts")
 
-class Cartitem ( models.Model ):
+
+
+class Cart_Item ( models.Model ):
     
     cart = models.ForeignKey(
         Cart, on_delete=models.CASCADE, 
@@ -211,9 +231,14 @@ class Cartitem ( models.Model ):
     def __str__(self):
         return str(self.quantity)
     
+    
+    class Meta:
+        verbose_name = _("Cart Item")
+        verbose_name_plural = _("Cart Items")
+    
    
 
-class SavedItem( BaseModel ):
+class Saved_Item( BaseModel ):
     
     owner = models.ForeignKey(
         User, 
@@ -241,6 +266,12 @@ class SavedItem( BaseModel ):
     
     def __str__(self):
         return str(self.id)
+    
+    
+    class Meta:
+        ordering = ['-created_date']
+        verbose_name = _("Saved Item")
+        verbose_name_plural = _("Saved Items")
     
     
 class Address( BaseModel ):
@@ -296,3 +327,9 @@ class Address( BaseModel ):
     
     def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.customer})"
+    
+    
+    class Meta:
+        ordering = ['-created_date']
+        verbose_name = _("Address")
+        verbose_name_plural = _("Addresses")

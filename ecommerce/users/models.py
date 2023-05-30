@@ -2,8 +2,9 @@ from django.contrib.auth.models import AbstractUser
 from django.db.models import CharField, EmailField
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-
+from django.db import models
 from ecommerce.users.managers import UserManager
+import uuid
 
 
 class User(AbstractUser):
@@ -16,21 +17,31 @@ class User(AbstractUser):
     # First and last name do not cover name patterns around the globe
     # name = None # type: ignore
     first_name = CharField(
-        _("Name of User"), 
+        _("First Name of User"), 
         blank=True, 
-        max_length=200
+        max_length=200,
+        help_text= _("Holds the First name of the user."),
         )
     
     last_name = CharField(
-        _("Name of User"), 
+        _("Last Name of User"), 
         blank=True, 
-        max_length=200
+        max_length=200,
+        help_text= _("Holds the Last name of the user")
         )
     
     email = EmailField(
         _("email address"), 
-        unique=True
+        unique=True,
+        help_text=_("The email address of the customer.")
         )
+
+    id = models.UUIDField(
+        default = uuid.uuid4,
+        editable=False,
+        primary_key=True,
+        help_text=_("The unique identifier of the customer.")
+    )
     
     username = None  # type: ignore
 
