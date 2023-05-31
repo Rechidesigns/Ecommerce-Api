@@ -80,7 +80,7 @@ class Product( BaseModel ):
         help_text= _('Product  image for the current product, which should be in PNG, JPEG, or JPG format')
         )
     
-    old_price = models.FloatField(
+    price = models.FloatField(
         default=100.00,
         verbose_name= _("Old Price"),
         help_text= _("This holds the old price of the product")
@@ -96,6 +96,7 @@ class Product( BaseModel ):
     
     slug = models.SlugField(
         default=None,
+        blank=True, null= True,
         verbose_name= _("Slug"),
         help_text= _("This is the slug of the product")
         )
@@ -119,21 +120,6 @@ class Product( BaseModel ):
         )
     
 
-    # @property
-    # def price(self):
-    #     if self.discount:
-    #         new_price = self.old_price - ((30/100)*self.old_price)
-    #     else:
-    #         new_price = self.old_price
-    #     return new_price
-    
-    # # @property
-    # def img(self):
-    #     if self.image == "":
-    #         self.image = ""
-        
-    #     return self.image
-
     def __str__(self):
         return self.name
     
@@ -142,8 +128,43 @@ class Product( BaseModel ):
         ordering = ['-created_date']
         verbose_name = _("Products ")
         verbose_name_plural = _("Products")
+        
+        
+        
+class Product_Image (models.Model):
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        related_name="images",
+        help_text= _("this holds the Product that Images")
+        )
     
+    image = models.ImageField(
+        verbose_name= _("Image"),
+        upload_to = "photos/properties_image",
+        blank=True, null=True,
+        help_text= _("This holds the Product Images")
+        )
     
+    def __str__(self):
+        return self.product
+    
+    # image compressor
+    def save(self, *args, **kwargs):
+        if self.image:
+            super().save(*args, **kwargs)
+            # Image.open() can also open other image types
+            img = Product_Image.open(self.image.path)
+            # WIDTH and HEIGHT are integers
+            resized_img = img.resize((640, 640))
+            resized_img.save(self.image.path)
+     
+    class Meta:
+
+        verbose_name = _("Products Image")
+        verbose_name_plural = _("Product Images")
+        
+   
 
 class Cart( BaseModel ):
     
@@ -174,19 +195,6 @@ class Cart( BaseModel ):
         verbose_name= _("Session ID"),
         help_text= _("This holds the session ID")
         )
-    
-
-    # @property
-    # def num_of_items(self):
-    #     cartitems = self.cartitems_set.all()
-    #     qtysum = sum([ qty.quantity for qty in cartitems])
-    #     return qtysum
-    
-    # @property
-    # def cart_total(self):
-    #     cartitems = self.cartitems_set.all()
-    #     qtysum = sum([ qty.subTotal for qty in cartitems])
-    #     return qtysum
 
     def __str__(self):
         return str(self.cart_id)
@@ -195,6 +203,44 @@ class Cart( BaseModel ):
         ordering = ['-created_date']
         verbose_name = _("Cart")
         verbose_name_plural = _("Carts")
+
+
+
+class Review(models.Model):
+    
+    product = models.ForeignKey(
+        "Product", 
+        on_delete=models.CASCADE, 
+        related_name = "reviews",
+        help_text= _("Holds the product on reviw")
+        )
+    
+    date_created = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name= _("Date Created"),
+        help_text= _("Hold the date the review was created")
+        )
+    
+    description = models.TextField(
+        default="description",
+        verbose_name= _("Description"),
+        help_text= _("This holds the description of the review")
+        )
+    
+    name = models.CharField(
+        max_length=200,
+        null=True,
+        blank=True,
+        default="Anonymous",
+        help_text= _('This field holds the name of the reviewer ')
+        )
+    
+    def __str__(self):
+        return self.description
+    
+    class Meta:
+        verbose_name = _("Review")
+        verbose_name_plural = _("Reviews")
 
 
 
@@ -220,13 +266,6 @@ class Cart_Item ( models.Model ):
         verbose_name= _("Quantity"),
         help_text= _("This holds the cart quantity")
         )
-    
-    
-    # @property
-    # def subTotal(self):
-    #     total = self.quantity * self.product.price
-        
-    #     return total
     
     def __str__(self):
         return str(self.quantity)

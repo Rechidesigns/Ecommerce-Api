@@ -9,7 +9,7 @@ class CategoryAdmin (admin.ModelAdmin):
 
 @admin.register( Product )
 class ProductAdmin (admin.ModelAdmin):
-    list_display = ('name','description', 'discount','image','old_price','category','slug','inventory','top_deal','flash_sales',)
+    list_display = ('name','description', 'discount','image','price','category','slug','inventory','top_deal','flash_sales',)
     list_display_links = ('name' , 'description' )
 
 @admin.register( Cart )
